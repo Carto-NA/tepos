@@ -148,7 +148,7 @@ CREATE TABLE met_zon.m_zon_tepos_na_geo (
 	statut varchar(50),
 	etat varchar(50),
 	date_signature date,
-	code_nature_juridique varchar(15),
+	num_siren varchar(15),
 	nature_juridique varchar(20),
 	gestionnaire varchar(254),
 	climagri varchar(5),	
