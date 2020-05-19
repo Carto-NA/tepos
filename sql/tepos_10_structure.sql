@@ -22,13 +22,13 @@ CREATE TABLE ref_zonage.t_appartenance_geo_com_tepos (
 	nomdep varchar(30),
 	numreg varchar(2),
 	nomreg varchar(35),
-	code_nature_juridique varchar(15),
+	membre_siren varchar(15),
 	nature_juridique varchar(20),
 	commentaires text,
 	date_import date,
 	date_maj date,
 	CONSTRAINT t_appartenance_geo_com_tepos_pkey PRIMARY KEY (id),
-	CONSTRAINT t_appartenance_geo_com_tepos_uniq UNIQUE (numcom)
+	CONSTRAINT t_appartenance_geo_com_tepos_uniq UNIQUE (numcom,nature_juridique)
 );
 
 --
@@ -37,7 +37,7 @@ COMMENT ON TABLE ref_zonage.t_appartenance_geo_com_tepos IS 'Table d''appartenan
 --
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.id IS 'Identifiant';
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.cog_annee IS 'Année COG de référence';
-COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.zon_code IS 'Code région du TEPOS';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.zon_code IS 'Numéro SIREN du TEPOS';
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.zon_nom IS 'Nom du TEPOS';
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.numcom IS 'Code INSEE de la commune';
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.nomcom IS 'Nom de la commune';
@@ -45,17 +45,20 @@ COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.numdep IS 'Numéro du 
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.nomdep IS 'Nom du département';
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.numreg IS 'Numéro de la région';
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.nomreg IS 'Nom de la régon';
-COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.code_nature_juridique IS 'Code de la nature juridique';
-COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.nature_juridique IS 'Nom de la nature juridique';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.membre_siren IS 'SIREN du membre';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.nature_juridique IS 'Nature juridique du membre';
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.commentaires IS 'Commentaires';
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.date_import IS 'Date d''import de la donnée';
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_tepos.date_maj IS 'Date de mise à jour de la donnée';
+
+------------------------------------------------------------------
+-- EPCI
 
 --
 INSERT INTO ref_zonage.t_appartenance_geo_com_tepos (
 	cog_annee, zon_code, zon_nom, 
 	numcom, nomcom, numdep, nomdep, numreg, nomreg, 
-	code_nature_juridique, nature_juridique, date_import, date_maj
+	membre_siren, nature_juridique, date_import, date_maj
 )
 SELECT 
 	'2020', 'tepos_'||t1.code_epci, t2.nom_epci,
@@ -65,13 +68,13 @@ FROM ref_adminexpress.r_admexp_commune_fr t1
 inner join ref_adminexpress.r_admexp_epci_fr t2
 on t1.code_epci = t2.code_epci and t2.code_epci in ('200067262','244000659','244000865',
 '244000543','200035541','200068948','200069656','200036523','200068922','200029734','243300811','200041689','200071827','200070506'
-,'200036473','241700624','241700434','200041499','247900798')
+,'200036473','241700624','241700434','200041499','247900798');
 
 -- Est Creuse Développement
 INSERT INTO ref_zonage.t_appartenance_geo_com_tepos (
 	cog_annee, zon_code, zon_nom, 
 	numcom, nomcom, numdep, nomdep, numreg, nomreg, 
-	code_nature_juridique, nature_juridique, date_import, date_maj
+	membre_siren, nature_juridique, date_import, date_maj
 )
 SELECT 
 	'2020', 'tepos_na001', 'Est Creuse Développement',
@@ -79,8 +82,60 @@ SELECT
 	t1.code_epci, 'EPCI', '19/05/2020', null
 FROM ref_adminexpress.r_admexp_commune_fr t1
 inner join ref_adminexpress.r_admexp_epci_fr t2
-on t1.code_epci = t2.code_epci and t2.code_epci in ('200067544','200067593')
+on t1.code_epci = t2.code_epci and t2.code_epci in ('200067544','200067593');
 
+------------------------------------------------------------------
+-- PETR 
+
+-- Ruffecois
+INSERT INTO ref_zonage.t_appartenance_geo_com_tepos (
+	cog_annee, zon_code, zon_nom, 
+	numcom, nomcom, numdep, nomdep, numreg, nomreg, 
+	membre_siren, nature_juridique, date_import, date_maj
+)
+SELECT 
+	'2020', 'tepos_'||t2.num_siren, t2.nom_groupement,
+	t1.insee_com, t1.nom_com , t1.insee_dep, t1.nom_dep, t1.insee_reg, t1.nom_reg, 
+	t1.code_epci, 'PETR', '19/05/2020', null
+FROM ref_adminexpress.r_admexp_commune_fr t1
+inner join (SELECT num_siren, nom_groupement, membre_siren 
+FROM ref_banatic.r_bana_appartenance_com_interco_na
+WHERE num_siren = '200050094') t2
+on t1.code_epci = t2.membre_siren; 
+
+------------------------------------------------------------------
+-- PNR 
+
+-- Millevaches en Limousin
+INSERT INTO ref_zonage.t_appartenance_geo_com_tepos (
+	cog_annee, zon_code, zon_nom, 
+	numcom, nomcom, numdep, nomdep, numreg, nomreg, 
+	membre_siren, nature_juridique, date_import, date_maj
+)
+SELECT 
+	'2020', 'tepos_'||id_mnhn, nompnrna, 
+	numcom, nomcom, numdep, null, numreg, null,
+	id_mnhn, 'PNR', '19/05/2020', null
+FROM ref_zonage.t_appartenance_geo_com_pnr_na
+where id_mnhn = 'FR8000045';
+	 
+------------------------------------------------------------------
+-- Communes
+
+-- Buxerolles
+INSERT INTO ref_zonage.t_appartenance_geo_com_tepos (
+	cog_annee, zon_code, zon_nom, 
+	numcom, nomcom, numdep, nomdep, numreg, nomreg, 
+	membre_siren, nature_juridique, date_import, date_maj
+)
+SELECT 
+	'2020', 'tepos_'||insee_com, t1.nom_com ,
+	t1.insee_com, t1.nom_com , t1.insee_dep, t1.nom_dep, t1.insee_reg, t1.nom_reg, 
+	t1.insee_com, 'Commune', '19/05/2020', null
+FROM ref_adminexpress.r_admexp_commune_fr t1
+inner join ref_adminexpress.r_admexp_epci_fr t2
+on t1.insee_com = '86041' and t1.code_epci = t2.code_epci;
+	 
 
 ------------------------------------------------------------------------
 -- Table: met_zon.m_zon_tepos_na_geo
@@ -111,7 +166,7 @@ CREATE TABLE met_zon.m_zon_tepos_na_geo (
 COMMENT ON TABLE met_zon.m_zon_tepos_na_geo  IS 'Zonage des territoires à énergie positive (TEPOS)';
 --  
 COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.id IS 'Identifiant';
-COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.zon_code IS 'Code région du TEPOS';
+COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.zon_code IS 'Numéro SIREN du TEPOS';
 COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.zon_nom IS 'Nom du TEPOS';
 COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.statut IS 'Statut du TEPOS';
 COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.etat IS 'Etat du TEPOS';
