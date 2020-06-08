@@ -9,10 +9,34 @@
 -- Grant : Droits des éléments
 ------------------------------------------------------------------------
 
--- Tables : ref_zonage.t_appartenance_geo_com_tepos
-GRANT ALL ON TABLE ref_zonage.t_appartenance_geo_com_tepos TO "pre-sig-usr";
-GRANT SELECT ON TABLE ref_zonage.t_appartenance_geo_com_tepos TO "pre-sig-ro";
+--
+GRANT ALL ON SCHEMA upload TO "pre-sig-usr";
+GRANT ALL ON SCHEMA upload TO "pre-sig-ro";
 
--- Tables : met_zon.m_zon_tepos_na_geo
-GRANT ALL ON TABLE met_zon.m_zon_tepos_na_geo TO "pre-sig-usr";
-GRANT SELECT ON TABLE met_zon.m_zon_tepos_na_geo TO "pre-sig-ro";
+--
+GRANT ALL ON TABLE upload.media_bdd TO "pre-sig-usr";
+GRANT ALL ON TABLE upload.media_bdd TO "pre-sig-ro";
+
+GRANT ALL ON SEQUENCE upload.media_bdd_id_seq TO "pre-sig-usr";
+GRANT ALL ON SEQUENCE upload.media_bdd_id_seq TO "pre-sig-ro";
+
+--
+GRANT ALL ON TABLE upload.media_rep TO "pre-sig-usr";
+GRANT ALL ON TABLE upload.media_rep TO "pre-sig-ro";
+
+--
+GRANT ALL ON TABLE upload.media_signaletique TO "pre-sig-ro";
+GRANT ALL ON SEQUENCE upload.media_signaletique_id_seq TO "pre-sig-ro";
+
+--
+GRANT ALL ON TABLE upload.media_dsi_localisation_site TO "pre-sig-ro";
+GRANT ALL ON SEQUENCE upload.media_dsi_localisation_site_id_seq TO "pre-sig-ro";
+
+-- Tables : upload.media_dsi_localisation_site
+GRANT ALL ON TABLE upload.media_dsi_localisation_site TO "pre-sig-ro";
+GRANT ALL ON SEQUENCE upload.media_dsi_localisation_site_id_seq TO "pre-sig-ro";
+
+
+-- Tables : upload.media_terri_tepos
+GRANT ALL ON TABLE upload.media_terri_tepos TO "pre-sig-ro";
+GRANT ALL ON SEQUENCE upload.media_terri_tepos_id_seq TO "pre-sig-ro";
