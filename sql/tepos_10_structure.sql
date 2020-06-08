@@ -145,6 +145,8 @@ CREATE TABLE met_zon.m_zon_tepos_na_geo (
 	id serial NOT NULL,
 	zon_code varchar(20) NOT NULL,
 	zon_nom varchar(254) NOT NULL,
+	population numeric,
+	nb_commune numeric,
 	statut varchar(50),
 	etat varchar(50),
 	date_signature date,
@@ -182,7 +184,7 @@ COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.geom IS 'Géometrie';
 
 --
 INSERT INTO met_zon.m_zon_tepos_na_geo (
-	zon_code, zon_nom, statut, etat, date_signature, num_siren, nature_juridique, 
+	zon_code, zon_nom, population, nb_commune, statut, etat, date_signature, num_siren, nature_juridique, 
 	commentaires, date_import, date_maj, srce_geom, srce_annee, geom
 )
 SELECT 
@@ -193,3 +195,15 @@ inner join ref_adminexpress.r_admexp_commune_fr t2
 on t1.numcom = t2.insee_com 
 group by t1.zon_code, t1.zon_nom, num_siren, t1.nature_juridique, t1.commentaires, t1.date_import,
 t1.date_maj, srce_geom, srce_annee;
+
+-- Ajout des numéros de département
+UPDATE met_zon.m_zon_tepos_na_geo t1
+SET numdep = t2.insee_dep 
+from (
+	SELECT zon_code, t2.insee_dep
+	FROM ref_zonage.t_appartenance_geo_com_tepos t1
+	inner join ref_adminexpress.r_admexp_commune_fr t2
+	on t1.numcom = t2.insee_com and t1.date_import >= '2020-01-01' and zon_code != 'tepos_FR8000045'
+	group by t1.zon_code, t1.zon_nom, t2.insee_dep 
+) t2
+WHERE t1.zon_code=t2.zon_code ;
