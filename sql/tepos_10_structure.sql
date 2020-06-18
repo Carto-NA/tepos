@@ -147,6 +147,7 @@ CREATE TABLE met_zon.m_zon_tepos_na_geo (
 	zon_nom varchar(254) NOT NULL,
 	population numeric,
 	nb_commune numeric,
+	numdep varchar(2),
 	statut varchar(50),
 	etat varchar(50),
 	date_signature date,
@@ -170,10 +171,12 @@ COMMENT ON TABLE met_zon.m_zon_tepos_na_geo  IS 'Zonage des territoires à éner
 COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.id IS 'Identifiant';
 COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.zon_code IS 'Numéro SIREN du TEPOS';
 COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.zon_nom IS 'Nom du TEPOS';
+COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.population IS 'Population du TEPOS';
+COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.nb_commune IS 'Nombre de commune qui constitue le TEPOS';
+COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.numdep IS 'Département du TEPOS';
 COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.statut IS 'Statut du TEPOS';
 COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.etat IS 'Etat du TEPOS';
 COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.date_signature IS 'Date de signature';
-COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.code_nature_juridique IS 'Code de la nature juridique';
 COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.nature_juridique IS 'Nom de la nature juridique';
 COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.commentaires IS 'Commentaires';
 COMMENT ON COLUMN met_zon.m_zon_tepos_na_geo.date_import IS 'Date d''import de la donnée';
