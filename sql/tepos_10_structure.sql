@@ -161,7 +161,7 @@ CREATE TABLE met_zon.m_zon_tepos_na_geo (
 	srce_annee varchar(4),
 	geom geometry(MULTIPOLYGON, 2154) NULL,
 	CONSTRAINT m_zon_tepos_na_geo_pkey PRIMARY KEY (id),
-	CONSTRAINT m_zon_tepos_na_geo_uniq UNIQUE (zon_code)
+	CONSTRAINT m_zon_tepos_na_geo_uniq UNIQUE (zon_code, srce_annee)
 );
 
 --
@@ -188,7 +188,7 @@ INSERT INTO met_zon.m_zon_tepos_na_geo (
 	commentaires, date_import, date_maj, srce_geom, srce_annee, geom
 )
 SELECT 
-	t1.zon_code, t1.zon_nom, null, null, null, substring(zon_code,7,27) as num_siren, nature_juridique,
+	t1.zon_code, t1.zon_nom, sum(population) as population, count(numcom) as nb_commune, null, null, null, substring(zon_code,7,27) as num_siren, nature_juridique,
 	commentaires, date_import, date_maj, 'BD IGN - AdminExpress' as srce_geom, '2020' as srce_annee, ST_Multi(ST_Union(t2.geom)) as geom
 FROM ref_zonage.t_appartenance_geo_com_tepos t1
 inner join ref_adminexpress.r_admexp_commune_fr t2
