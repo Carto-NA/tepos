@@ -1,5 +1,4 @@
-# tepos
-Territoire à énergie positive
+# Documentation technique de la base de données des territoires à énergie positive (TEPOS)
 
 
 Territoire TEPOS
