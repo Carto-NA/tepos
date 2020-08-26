@@ -47,3 +47,19 @@ Aurélien BERNIER ( - site de Poitiers)
 |r_osm|geo_osm_epci|donnée de référence géographique du découpage epci OSM|nom de l'EPCI|
 
 
+### Dictionnaire de donnée
+| Table | Champ | Désignation | Type/Taille | Taille | Contrainte | Règle de calcul | Clé étrangère | Commentaire |
+| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+|  | numcom | Code INSEE de la commune | varchar(5) |  |  | numcom | numcom de la table d'appartenance des communes |
+|  | zon_code | Code du territoire | varchar(80) | unique |  |  |  |
+|  | zon_nom | Nom du territoire | varchar(255) |  |  |  |  |
+|  | nature_jur | Nature juridique du territoire | varchar(20) |  |  |  |  |
+|  | commentaire | Commentaire | text |  |  |  |  |
+|  | annee | Année de la données | varchar(10) |  |  |  |  |
+|  | geom | Géométrie de l'objet | varchar(4) |  |  |  |  |
+|  | src_geom | Code du référentiel géographique utilisé pour la saisie  | varchar(10) |  |  |  | référence à la table de valeur lt_src_geom |
+|  | date_sai | Date d'import/ajout de la donnée dans la base | datetime |  |  |  |  |
+|  | date_maj | Date de mise à jour de la donnée | datetime |  |  |  |  |
+
+
+
