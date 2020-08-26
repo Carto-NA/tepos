@@ -210,3 +210,10 @@ from (
 	group by t1.zon_code, t1.zon_nom, t2.insee_dep 
 ) t2
 WHERE t1.zon_code=t2.zon_code ;
+
+====================
+_*A faire :*_
+*Il faut faire un trigger/fonction qui permet de mettre à jour la table met_zon.m_zon_tepos_na_geo et ref_zonage.t_appartenance_geo_com_tepos concernant la modification du libellé des zonages.
+Parce que celui-ci peut-être mise à jour directement par l'utilisateur via l'interface dynamique.*
+
+
