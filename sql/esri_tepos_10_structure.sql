@@ -1,6 +1,6 @@
 /* TEPOS V1.0 */
-/* Creation de la structure des données (tables, séquences, triggers,...) */
-/* tepos_10_structure.sql */
+/* ESRI : Creation de la structure des données (tables, séquences, triggers,...) */
+/* esr_tepos_10_structure.sql */
 /* PostgreSQL/PostGIS */
 /* Conseil régional Nouvelle-Aquitaine - https://cartographie.nouvelle-aquitaine.fr/ */
 /* Auteur : Tony VINCENT */
@@ -137,7 +137,34 @@ SELECT
 FROM ref_adminexpress.r_admexp_commune_fr t1
 inner join ref_adminexpress.r_admexp_epci_fr t2
 on t1.insee_com = '86041' and t1.code_epci = t2.code_epci;
-	 
+
+------------------------------------------------------------------------
+-- Table: met_zon.m_zon_lt_tepos_na
+
+-- DROP TABLE met_zon.m_zon_lt_tepos_na;
+CREATE TABLE met_zon.m_zon_lt_tepos_na (
+	id serial,
+	zon_code  character varying(80) NOT NULL,
+	zon_nom character varying(255) NOT NULL,
+	nature_juridique varchar(20),
+
+	--numcom varchar(5) NOT NULL,
+	--nomcom varchar(50),
+	--nomcom_m varchar(50),
+	--numdep varchar(3),
+	--nomdep varchar(30),
+	--numreg varchar(2),
+	--nomreg varchar(35),
+	--membre_siren varchar(15),
+	--annee character varying(4),
+	--commentaires text,
+	date_sai date,
+	date_maj date,
+	CONSTRAINT m_zon_lt_tepos_na_pkey PRIMARY KEY (id),
+	CONSTRAINT m_zon_lt_tepos_na_uniq UNIQUE (zon_code,annee),
+     FOREIGN KEY(code_nature_jur_1) REFERENCES met_zon_m_zon_lt_nature_juridique(code_nature_jur)
+
+);
 
 ------------------------------------------------------------------------
 -- Table: met_zon.m_zon_tepos_na_geo
