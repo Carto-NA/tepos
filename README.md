@@ -32,14 +32,13 @@ Les TEPOS Nouvelle-Aquitaine s'engagent à respecter les cinq principes de la «
 ----
 
 **Titre de la carte :**<br>
-Le réseau TEPOS en Nouvelle-Aquitaine
+>Le réseau TEPOS en Nouvelle-Aquitaine
 
 **Description :**<br>
-Les territoires à énergie positive (TEPOS) Nouvelle-Aquitaine sont issus de plusieurs appels à projet lancés par la Région et l’ADEME qui les accompagnent dans leurs démarches.
+>Les territoires à énergie positive (TEPOS) Nouvelle-Aquitaine sont issus de plusieurs appels à projet lancés par la Région et l’ADEME qui les accompagnent dans leurs démarches.
 
 **Mots clés :**<br>
-tepos, territoire, nouvelle-aquitaine, donnees-ouvertes, 
-climat, aménagement du territoire, énergie
+>tepos, territoire, nouvelle-aquitaine, donnees-ouvertes, climat, aménagement du territoire, énergie
 
 
 
