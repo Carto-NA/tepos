@@ -7,6 +7,8 @@
   - [ ] finaliser
   - [ ] révision
 
+----
+
 
 ### Présentation 
 Les territoires à énergie positive (TEPOS) Nouvelle-Aquitaine sont issus de plusieurs appels à projet lancés par la Région et l’ADEME qui les accompagnent dans leurs démarches.
@@ -27,16 +29,7 @@ Les TEPOS Nouvelle-Aquitaine s'engagent à respecter les cinq principes de la «
     --> Principe 4 - mettre en place, pour et avec les habitants, une véritable démocratie énergétique locale pour favoriser la connaissance des enjeux, le partage de la prise de décision, les changements de comportements, les retombées économiques locales par l'implication dans des projets collectifs et citoyens ;
     --> Principe 5 - se doter des compétences indispensables et des outils adéquats pour la mise en œuvre d’une politique énergétique territoriale ambitieuse.
 
-
-
-statut : engagement
-etat : reconnu, 
-date_signature : 
-nature_juridique : Syndicat mixte, EPCI, autres
-climagri : 0/1/2/...
-
-src_geom : AdminExpress
-src_annee : 2020
+----
 
 **Titre de la carte :**<br>
 Le réseau TEPOS en Nouvelle-Aquitaine
@@ -86,5 +79,13 @@ Il n'y a pas de veille faite sur ces territoires, les mise à jours ou modificat
 
 
 
+statut : engagement
+etat : reconnu, 
+date_signature : 
+nature_juridique : Syndicat mixte, EPCI, autres
+climagri : 0/1/2/...
+
+src_geom : AdminExpress
+src_annee : 2020
 
 
