@@ -12,10 +12,10 @@
 -- DROP TABLE ref_zonage.t_appartenance_geo_com_tepos;
 CREATE TABLE ref_zonage.t_appartenance_geo_com_tepos (
 	id serial,
-	annee character varying(4),
 	zon_code  character varying(80) NOT NULL,
-  numcom varchar(5) NOT NULL,
-	--zon_nom character varying(255),
+	zon_nom character varying(255) NOT NULL,
+	nature_juridique varchar(20),
+	--numcom varchar(5) NOT NULL,
 	--nomcom varchar(50),
 	--nomcom_m varchar(50),
 	--numdep varchar(3),
@@ -23,12 +23,12 @@ CREATE TABLE ref_zonage.t_appartenance_geo_com_tepos (
 	--numreg varchar(2),
 	--nomreg varchar(35),
 	--membre_siren varchar(15),
-	--nature_juridique varchar(20),
-	commentaires text,
+	--annee character varying(4),
+	--commentaires text,
 	date_sai date,
 	date_maj date,
 	CONSTRAINT t_appartenance_geo_com_tepos_pkey PRIMARY KEY (id),
-	CONSTRAINT t_appartenance_geo_com_tepos_uniq UNIQUE (numcom,annee),
+	CONSTRAINT t_appartenance_geo_com_tepos_uniq UNIQUE (zon_code),
      FOREIGN KEY(code_nature_jur_1) REFERENCES met_zon_m_zon_lt_nature_juridique(code_nature_jur)
 
 );
