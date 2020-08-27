@@ -55,7 +55,7 @@ Il n'y a pas de veille faite sur ces territoires, les mise à jours ou modificat
 | Table | Champ | Désignation | Type/Taille | Taille | Contrainte | Règle de calcul | Clé étrangère | Commentaire |
 | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 |  | numcom | Code INSEE de la commune | varchar(5) |  |  | numcom | numcom de la table d'appartenance des communes |
-|  | zon_code | Code du territoire | varchar(80) | unique |  |  |  |
+|  | zon_code | Code du territoire | varchar(80) |  | not null/unique |  |  |
 |  | zon_nom | Nom du territoire | varchar(255) |  |  |  |  |
 |  | nature_jur | Nature juridique du territoire | varchar(20) |  |  |  |  |
 |  | commentaire | Commentaire | text |  |  |  |  |
