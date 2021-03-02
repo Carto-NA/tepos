@@ -267,12 +267,11 @@ CREATE TABLE met_zon.m_zon_pcaet_na_geo (
 	id serial NOT NULL,
 	zon_code varchar(20) NOT NULL,
 	zon_nom varchar(254) NOT NULL,
-	population numeric,
-	nb_commune numeric,
+	population integer,
+	nb_commune integer,
 	numdep varchar(2),
 	num_siren varchar(15),
 	nature_juridique varchar(20),
-	gestionnaire varchar(254),
 	commentaires text NULL,
 	date_import date NULL,
 	date_maj date NULL,
@@ -292,14 +291,52 @@ COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.zon_nom IS 'Nom du PCAET';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.population IS 'Population du PCAET';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.nb_commune IS 'Nombre de commune qui constitue le PCAET';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.numdep IS 'Département du PCAET';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.num_siren IS 'Numéro SIREN';														   
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.nature_juridique IS 'Nom de la nature juridique';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.commentaires IS 'Commentaires';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.date_import IS 'Date d''import de la donnée';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.date_maj IS 'Date de mise à jour de la donnée';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.srce_geom IS 'Référentiel utilisé pour construire la géométrie';
-COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.srce_annee IS 'Année du référentiel géometrque';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.srce_annee IS 'Année du référentiel géometrique';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.geom IS 'Géometrie';
+
 															   
+------------------------------------------------------------------------
+-- Table: met_env.m_env_pcaet
+
+-- DROP TABLE met_env.m_env_pcaet;
+CREATE TABLE met_env.m_env_pcaet (
+	id serial NOT NULL,
+	zon_code varchar(20) NOT NULL,
+	decision_elaboration varchar(50),
+	statut varchar(50),
+	etape varchar(255),
+	avancement varchar(255),
+	site_web varchar(255),
+	commentaires text NULL,
+	date_import date NULL,
+	date_maj date NULL,
+	srce_annee varchar(4),
+	CONSTRAINT m_env_pcaet_pkey PRIMARY KEY (id),
+	CONSTRAINT m_env_pcaet_uniq UNIQUE (zon_code, srce_annee)
+);															   
+		
+--
+COMMENT ON TABLE met_env.m_env_pcaet  IS 'Table contenant les éléments de suivi du plan Climat-Air-Energie territorial (PCAET)';
+--  
+COMMENT ON COLUMN met_env.m_env_pcaet.id IS 'Identifiant';
+COMMENT ON COLUMN met_env.m_env_pcaet.zon_code IS 'Code du PCAET';
+COMMENT ON COLUMN met_env.m_env_pcaet.decision_elaboration IS 'Date de la décision d''élaboration';
+COMMENT ON COLUMN met_env.m_env_pcaet.statut IS 'Statut du PCAET (obligé/volontaire/autres/Non renseigné)';
+COMMENT ON COLUMN met_env.m_env_pcaet.etape IS 'Etape en cours (0: pas démarré/abandon; 1: délibération; 2: diagnostic réalisé; 3: stratégie réalisé; 4: plan d''action; 5: consultation/approbation)';
+COMMENT ON COLUMN met_env.m_env_pcaet.avancement IS 'Date et élément majeur d''avancement';														   
+COMMENT ON COLUMN met_env.m_env_pcaet.site_web IS 'Lien vers le territoire';
+COMMENT ON COLUMN met_env.m_env_pcaet.commentaires IS 'Commentaires';
+COMMENT ON COLUMN met_env.m_env_pcaet.date_import IS 'Date d''import de la donnée';
+COMMENT ON COLUMN met_env.m_env_pcaet.date_maj IS 'Date de mise à jour de la donnée';
+COMMENT ON COLUMN met_env.m_env_pcaet.srce_annee IS 'Année du référentiel géometrique';
+	
+	
 ====================
 _*A faire :*_
 *Il faut faire un trigger/fonction qui permet de mettre à jour la table met_zon.m_zon_tepos_na_geo et ref_zonage.t_appartenance_geo_com_tepos concernant la modification du libellé des zonages.
