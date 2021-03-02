@@ -286,7 +286,6 @@ FROM ref_adminexpress.r_admexp_epci_fr t2 WHERE mbr_siren = t2.code_epci;
 
 
 -- SCOT
-
 --
 INSERT INTO ref_zonage.t_appartenance_geo_com_pcaet(
 	cog_annee, zon_code, zon_nom, 
@@ -365,6 +364,34 @@ COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.srce_geom IS 'Référentiel utilis�
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.srce_annee IS 'Année du référentiel géometrique';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.geom IS 'Géometrie';
 
+--
+INSERT INTO met_zon.m_zon_pcaet_na_geo (
+	zon_code, zon_nom, population, nb_commune, numdep, 
+	num_siren, nature_juridique, 
+	commentaires, date_import, date_maj, srce_geom, srce_annee, geom
+)
+SELECT 
+	t1.zon_code, t1.zon_nom, sum(t1.population) as population, count(numcom) as nb_commune, null, 
+	substring(zon_code,7,27) as num_siren, t1.zon_type,
+	commentaires, date_import, date_maj, 'BD IGN - AdminExpress' as srce_geom, '2021' as srce_annee, ST_Multi(ST_Union(t2.geom)) as geom
+FROM ref_zonage.t_appartenance_geo_com_pcaet t1
+inner join ref_adminexpress.r_admexp_commune_fr t2
+on t1.numcom = t2.insee_com 
+group by t1.zon_code, t1.zon_nom, num_siren, t1.zon_type, t1.commentaires, t1.date_import,
+t1.date_maj, srce_geom, srce_annee;
+															   
+-- Ajout des numéros de département
+UPDATE met_zon.m_zon_pcaet_na_geo t1
+SET numdep = t2.insee_dep 
+from (
+	SELECT zon_code, t2.insee_dep
+	FROM ref_zonage.t_appartenance_geo_com_pcaet t1
+	inner join ref_adminexpress.r_admexp_commune_fr t2
+	on t1.numcom = t2.insee_com 
+	--and t1.date_import >= '2020-01-01' and zon_code != 'tepos_FR8000045'
+	group by t1.zon_code, t1.zon_nom, t2.insee_dep 
+) t2
+WHERE t1.zon_code=t2.zon_code ;															   
 															   
 ------------------------------------------------------------------------
 -- Table: met_env.m_env_pcaet
