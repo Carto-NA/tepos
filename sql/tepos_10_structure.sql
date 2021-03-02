@@ -304,6 +304,25 @@ ON t2."type de membre" = 'SCOT' AND t1.code_ets_scot = t2."code du membre";
 -- Mise à jour de la population
 UPDATE ref_zonage.t_appartenance_geo_com_pcaet  SET population = t2.population 
 FROM ref_adminexpress.r_admexp_commune_fr t2 WHERE numcom = t2.insee_com;
+									
+
+-- PETR
+--
+INSERT INTO ref_zonage.t_appartenance_geo_com_pcaet(
+	cog_annee, zon_code, zon_nom, 
+	--zon_type, 
+	mbr_nature_juridique, mbr_siren, mbr_nom, 
+	numcom, nomcom, population, numdep, numreg, commentaires, date_import, date_maj
+)
+SELECT 
+	'2021', 'pcaet_'||t2.num_siren, t2.nom_groupement,
+	'PETR', t2.membre_siren, t2.membre_nom,
+	t1.insee_com, t1.nom_com , null, t1.insee_dep, t1.insee_reg, null, '02/03/2021', null
+FROM ref_adminexpress.r_admexp_commune_fr t1
+inner join (SELECT num_siren, nom_groupement, membre_siren, membre_nom
+FROM ref_banatic.r_bana_appartenance_com_interco_na
+WHERE num_siren = '200072189') t2
+on t1.code_epci = t2.membre_siren; 															   
 															   
 ------------------------------------------------------------------------
 -- Table: met_zon.m_zon_pcaet_na_geo
