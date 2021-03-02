@@ -211,6 +211,95 @@ from (
 ) t2
 WHERE t1.zon_code=t2.zon_code ;
 
+															   
+------------------------------------------------------------------------
+-- Table: ref_zonage.t_appartenance_geo_com_pcaet
+
+-- DROP TABLE ref_zonage.t_appartenance_geo_com_pcaet;
+CREATE TABLE ref_zonage.t_appartenance_geo_com_pcaet (
+	id serial,
+	cog_annee character varying(4),
+	zon_code  character varying(80),
+	zon_nom character varying(255),
+	zon_type character varying(50),
+	mbr_nature_juridique varchar(20),
+	mbr_siren varchar(15),
+	mbr_nom varchar(255),
+	numcom varchar(5) NOT NULL,
+	nomcom varchar(50),
+	population integer,
+	numdep varchar(3),
+	numreg varchar(2),
+	commentaires text,
+	date_import date,
+	date_maj date,
+	CONSTRAINT t_appartenance_geo_com_pcaet_pkey PRIMARY KEY (id),
+	CONSTRAINT t_appartenance_geo_com_pcaet_uniq UNIQUE (numcom,mbr_nature_juridique)
+);
+
+--
+COMMENT ON TABLE ref_zonage.t_appartenance_geo_com_pcaet IS 'Table d''appartenance des communes au plan climat-air-énergie territorial (PCAET)';
+
+--
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.id IS 'Identifiant';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.cog_annee IS 'Année COG de référence';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.zon_code IS 'Code du territoire (pcaet_[SIREN ou autre])';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.zon_nom IS 'Nom du territoire';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.zon_type IS 'Type du territoire';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.mbr_nature_juridique IS 'Nature juridique du membre';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.mbr_siren IS 'SIREN du membre';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.mbr_nom IS 'Nom du membre';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.numcom IS 'Code INSEE de la commune';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.nomcom IS 'Nom de la commune';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.population IS 'Population de la commune';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.numdep IS 'Numéro du département';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.numreg IS 'Numéro de la région';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.commentaires IS 'Commentaires';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.date_import IS 'Date d''import de la donnée';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.date_maj IS 'Date de mise à jour de la donnée';															   
+
+
+------------------------------------------------------------------------
+-- Table: met_zon.m_zon_pcaet_na_geo
+
+-- DROP TABLE met_zon.m_zon_pcaet_na_geo;
+CREATE TABLE met_zon.m_zon_pcaet_na_geo (
+	id serial NOT NULL,
+	zon_code varchar(20) NOT NULL,
+	zon_nom varchar(254) NOT NULL,
+	population numeric,
+	nb_commune numeric,
+	numdep varchar(2),
+	num_siren varchar(15),
+	nature_juridique varchar(20),
+	gestionnaire varchar(254),
+	commentaires text NULL,
+	date_import date NULL,
+	date_maj date NULL,
+	srce_geom varchar(50),
+	srce_annee varchar(4),
+	geom geometry(MULTIPOLYGON, 2154) NULL,
+	CONSTRAINT m_zon_pcaet_na_geo_pkey PRIMARY KEY (id),
+	CONSTRAINT m_zon_pcaet_na_geo_uniq UNIQUE (zon_code, srce_annee)
+);
+
+--
+COMMENT ON TABLE met_zon.m_zon_pcaet_na_geo  IS 'Zonage du plan Climat-Air-Energie territorial (PCAET)';
+--  
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.id IS 'Identifiant';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.zon_code IS 'Code du PCAET';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.zon_nom IS 'Nom du PCAET';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.population IS 'Population du PCAET';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.nb_commune IS 'Nombre de commune qui constitue le PCAET';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.numdep IS 'Département du PCAET';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.nature_juridique IS 'Nom de la nature juridique';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.commentaires IS 'Commentaires';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.date_import IS 'Date d''import de la donnée';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.date_maj IS 'Date de mise à jour de la donnée';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.srce_geom IS 'Référentiel utilisé pour construire la géométrie';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.srce_annee IS 'Année du référentiel géometrque';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.geom IS 'Géometrie';
+															   
 ====================
 _*A faire :*_
 *Il faut faire un trigger/fonction qui permet de mettre à jour la table met_zon.m_zon_tepos_na_geo et ref_zonage.t_appartenance_geo_com_tepos concernant la modification du libellé des zonages.
