@@ -258,7 +258,53 @@ COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.commentaires IS 'Comme
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.date_import IS 'Date d''import de la donnée';
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.date_maj IS 'Date de mise à jour de la donnée';															   
 
+															   
+---------------------------------------------------------------------------------------------
+-- Intégration des données
+															   
+-- EPCI
 
+--
+INSERT INTO ref_zonage.t_appartenance_geo_com_pcaet(
+	cog_annee, zon_code, zon_nom, 
+	--zon_type, 
+	mbr_nature_juridique, mbr_siren, mbr_nom, 
+	numcom, nomcom, population, numdep, numreg, commentaires, date_import, date_maj
+)
+SELECT 
+	'2021', 'pcaet_'||t1.code_epci, null,
+	'EPCI', t1.code_epci, null,
+	t1.insee_com, t1.nom_com, t1.population, t1.insee_dep, t1.insee_reg, null, '02/03/2021', null
+FROM ref_adminexpress.r_admexp_commune_fr t1
+inner join z_maj."20210204_Suivi_PCAET_resume" t2
+on t2."type de membre" = 'EPCI' and t1.code_epci = t2."code du membre";
+
+-- Mise à jour du nom de l'EPCI
+UPDATE ref_zonage.t_appartenance_geo_com_pcaet  SET zon_nom = t2.nom_epci, mbr_nom = t2.nom_epci 
+FROM ref_adminexpress.r_admexp_epci_fr t2 WHERE mbr_siren = t2.code_epci;
+															   
+
+
+-- SCOT
+
+--
+INSERT INTO ref_zonage.t_appartenance_geo_com_pcaet(
+	cog_annee, zon_code, zon_nom, 
+	mbr_nature_juridique, mbr_siren, mbr_nom, 
+	numcom, nomcom, population, numdep, numreg, commentaires, date_import, date_maj
+)
+SELECT 
+	'2021', 'pcaet_'||t1.code_ets_scot, null,
+	'SCOT', t1.code_ets_scot, null,
+	t1.numcom, t1.nomcom, null, t1.numdep, t1.numreg, null, '02/03/2021', null
+FROM ref_zonage.t_appartenance_geo_com_scot t1
+INNER JOIN z_maj."20210204_Suivi_PCAET_resume" t2
+ON t2."type de membre" = 'SCOT' AND t1.code_ets_scot = t2."code du membre";
+
+-- Mise à jour de la population
+UPDATE ref_zonage.t_appartenance_geo_com_pcaet  SET population = t2.population 
+FROM ref_adminexpress.r_admexp_commune_fr t2 WHERE numcom = t2.insee_com;
+															   
 ------------------------------------------------------------------------
 -- Table: met_zon.m_zon_pcaet_na_geo
 
