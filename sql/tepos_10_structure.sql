@@ -219,6 +219,41 @@ WHERE t1.zon_code=t2.zon_code ;
 CREATE TABLE ref_zonage.t_appartenance_geo_com_pcaet (
 	id serial,
 	cog_annee character varying(4),
+	numcom varchar(5) NOT NULL,
+	nomcom varchar(50),
+	population integer,
+	numdep varchar(3),
+	numreg varchar(2),
+	zon_code  character varying(80),
+	zon_nom character varying(255),
+	zon_type character varying(50),
+	commentaires text,
+	date_import date,
+	date_maj date,
+	CONSTRAINT t_appartenance_geo_com_pcaet_pkey PRIMARY KEY (id),
+	CONSTRAINT t_appartenance_geo_com_pcaet_uniq UNIQUE (numcom)
+);
+															   
+COMMENT ON TABLE ref_zonage.t_appartenance_geo_com_pcaet IS 'Table d''appartenance des communes au plan climat-air-énergie territorial (PCAET)';
+
+--
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.id IS 'Identifiant';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.cog_annee IS 'Année COG de référence';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.numcom IS 'Code INSEE de la commune';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.nomcom IS 'Nom de la commune';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.population IS 'Population de la commune';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.numdep IS 'Numéro du département';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.numreg IS 'Numéro de la région';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.zon_code IS 'Code du territoire (pcaet_[SIREN ou autre])';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.zon_nom IS 'Nom du territoire';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.zon_type IS 'Type du territoire';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.commentaires IS 'Commentaires';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.date_import IS 'Date d''import de la donnée';
+COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.date_maj IS 'Date de mise à jour de la donnée';
+															   
+/*CREATE TABLE ref_zonage.t_appartenance_geo_com_pcaet (
+	id serial,
+	cog_annee character varying(4),
 	zon_code  character varying(80),
 	zon_nom character varying(255),
 	zon_type character varying(50),
@@ -257,34 +292,28 @@ COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.numreg IS 'Numéro de 
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.commentaires IS 'Commentaires';
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.date_import IS 'Date d''import de la donnée';
 COMMENT ON COLUMN ref_zonage.t_appartenance_geo_com_pcaet.date_maj IS 'Date de mise à jour de la donnée';															   
-
+*/
 															   
 ---------------------------------------------------------------------------------------------
 -- Intégration des données
 															   
 -- EPCI
-
 --
 INSERT INTO ref_zonage.t_appartenance_geo_com_pcaet(
-	cog_annee, zon_code, zon_nom, 
-	--zon_type, 
-	mbr_nature_juridique, mbr_siren, mbr_nom, 
+	cog_annee, zon_code, zon_nom, zon_type,
 	numcom, nomcom, population, numdep, numreg, commentaires, date_import, date_maj
 )
 SELECT 
-	'2021', 'pcaet_'||t1.code_epci, null,
-	'EPCI', t1.code_epci, null,
-	t1.insee_com, t1.nom_com, t1.population, t1.insee_dep, t1.insee_reg, null, '02/03/2021', null
+	'2021', t1.code_epci, t3.nom_epci, t3.type_epci,
+	t1.insee_com, t1.nom_com, t1.population, t1.insee_dep, t1.insee_reg, null, '03/03/2021', null
 FROM ref_adminexpress.r_admexp_commune_fr t1
 inner join z_maj."20210204_Suivi_PCAET_resume" t2
-on t2."type de membre" = 'EPCI' and t1.code_epci = t2."code du membre";
-
--- Mise à jour du nom de l'EPCI
-UPDATE ref_zonage.t_appartenance_geo_com_pcaet  SET zon_nom = t2.nom_epci, mbr_nom = t2.nom_epci 
-FROM ref_adminexpress.r_admexp_epci_fr t2 WHERE mbr_siren = t2.code_epci;
+on t2."type de membre" = 'EPCI' and t1.code_epci = t2."code du membre"
+inner join ref_adminexpress.r_admexp_epci_fr t3
+on t2."code du membre" = t3.code_epci;
 															   
 
-
+/*
 -- SCOT
 --
 INSERT INTO ref_zonage.t_appartenance_geo_com_pcaet(
@@ -321,7 +350,7 @@ FROM ref_adminexpress.r_admexp_commune_fr t1
 inner join (SELECT num_siren, nom_groupement, membre_siren, membre_nom
 FROM ref_banatic.r_bana_appartenance_com_interco_na
 WHERE num_siren = '200072189') t2
-on t1.code_epci = t2.membre_siren; 															   
+on t1.code_epci = t2.membre_siren; 	*/														   
 															   
 ------------------------------------------------------------------------
 -- Table: met_zon.m_zon_pcaet_na_geo
@@ -331,11 +360,10 @@ CREATE TABLE met_zon.m_zon_pcaet_na_geo (
 	id serial NOT NULL,
 	zon_code varchar(20) NOT NULL,
 	zon_nom varchar(254) NOT NULL,
+	zon_type character varying(50),
 	population integer,
 	nb_commune integer,
 	numdep varchar(2),
-	num_siren varchar(15),
-	nature_juridique varchar(20),
 	commentaires text NULL,
 	date_import date NULL,
 	date_maj date NULL,
@@ -352,11 +380,10 @@ COMMENT ON TABLE met_zon.m_zon_pcaet_na_geo  IS 'Zonage du plan Climat-Air-Energ
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.id IS 'Identifiant';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.zon_code IS 'Code du PCAET';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.zon_nom IS 'Nom du PCAET';
+COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.zon_type IS 'Type du PCAET';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.population IS 'Population du PCAET';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.nb_commune IS 'Nombre de commune qui constitue le PCAET';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.numdep IS 'Département du PCAET';
-COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.num_siren IS 'Numéro SIREN';														   
-COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.nature_juridique IS 'Nom de la nature juridique';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.commentaires IS 'Commentaires';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.date_import IS 'Date d''import de la donnée';
 COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.date_maj IS 'Date de mise à jour de la donnée';
@@ -427,8 +454,20 @@ COMMENT ON COLUMN met_env.m_env_pcaet.commentaires IS 'Commentaires';
 COMMENT ON COLUMN met_env.m_env_pcaet.date_import IS 'Date d''import de la donnée';
 COMMENT ON COLUMN met_env.m_env_pcaet.date_maj IS 'Date de mise à jour de la donnée';
 COMMENT ON COLUMN met_env.m_env_pcaet.srce_annee IS 'Année du référentiel géometrique';
-	
-	
+
+--															   
+INSERT INTO met_env.m_env_pcaet(
+	zon_code, decision_elaboration, statut, etape, avancement, 
+	site_web, commentaires, date_import, date_maj, srce_annee
+)
+SELECT 
+	"code du membre", "décision élaboration", "obligé/volontaire", "etape en cours", avancement, 
+	lien, null, '02/03/2021', null, '2021'
+FROM z_maj."20210204_Suivi_PCAET_resume" 
+WHERE "type de membre" = 'EPCI';
+
+															   
+															   
 ====================
 _*A faire :*_
 *Il faut faire un trigger/fonction qui permet de mettre à jour la table met_zon.m_zon_tepos_na_geo et ref_zonage.t_appartenance_geo_com_tepos concernant la modification du libellé des zonages.
