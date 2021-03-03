@@ -16,3 +16,11 @@ GRANT SELECT ON TABLE ref_zonage.t_appartenance_geo_com_tepos TO "pre-sig-ro";
 -- Tables : met_zon.m_zon_tepos_na_geo
 GRANT ALL ON TABLE met_zon.m_zon_tepos_na_geo TO "pre-sig-usr";
 GRANT SELECT ON TABLE met_zon.m_zon_tepos_na_geo TO "pre-sig-ro";
+
+-- Tables : met_zon.m_zon_pcaet_na_geo
+GRANT ALL ON TABLE met_zon.m_zon_pcaet_na_geo TO "pre-sig-usr";
+GRANT SELECT ON TABLE met_zon.m_zon_pcaet_na_geo TO "pre-sig-ro";
+
+-- Tables : met_env.m_env_pcaet
+GRANT ALL ON TABLE met_env.m_env_pcaet TO "pre-sig-usr";
+GRANT SELECT ON TABLE met_env.m_env_pcaet TO "pre-sig-ro";
