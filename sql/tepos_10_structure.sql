@@ -393,18 +393,16 @@ COMMENT ON COLUMN met_zon.m_zon_pcaet_na_geo.geom IS 'Géometrie';
 
 --
 INSERT INTO met_zon.m_zon_pcaet_na_geo (
-	zon_code, zon_nom, population, nb_commune, numdep, 
-	num_siren, nature_juridique, 
+	zon_code, zon_nom, zon_type, population, nb_commune, numdep, 
 	commentaires, date_import, date_maj, srce_geom, srce_annee, geom
 )
 SELECT 
-	t1.zon_code, t1.zon_nom, sum(t1.population) as population, count(numcom) as nb_commune, null, 
-	substring(zon_code,7,27) as num_siren, t1.zon_type,
+	t1.zon_code, t1.zon_nom, t1.zon_type, sum(t1.population) as population, count(numcom) as nb_commune, null, 
 	commentaires, date_import, date_maj, 'BD IGN - AdminExpress' as srce_geom, '2021' as srce_annee, ST_Multi(ST_Union(t2.geom)) as geom
 FROM ref_zonage.t_appartenance_geo_com_pcaet t1
 inner join ref_adminexpress.r_admexp_commune_fr t2
 on t1.numcom = t2.insee_com 
-group by t1.zon_code, t1.zon_nom, num_siren, t1.zon_type, t1.commentaires, t1.date_import,
+group by t1.zon_code, t1.zon_nom, t1.zon_type, t1.commentaires, t1.date_import,
 t1.date_maj, srce_geom, srce_annee;
 															   
 -- Ajout des numéros de département
