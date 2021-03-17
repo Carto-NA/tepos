@@ -305,12 +305,12 @@ INSERT INTO ref_zonage.t_appartenance_geo_com_pcaet(
 )
 SELECT 
 	'2021', t1.code_epci, t3.nom_epci, t3.type_epci,
-	t1.insee_com, t1.nom_com, t1.population, t1.insee_dep, t1.insee_reg, null, '03/03/2021', null
+	t1.insee_com, t1.nom_com, t1.population, t1.insee_dep, t1.insee_reg, null, '17/03/2021', null
 FROM ref_adminexpress.r_admexp_commune_fr t1
-inner join z_maj."20210204_Suivi_PCAET_resume" t2
-on t2."type de membre" = 'EPCI' and t1.code_epci = t2."code du membre"
+inner join z_maj."20210317_Suivi_PCAET_resume_" t2
+on t2."type de membre" = 'EPCI' and t1.code_epci = t2."code epci"
 inner join ref_adminexpress.r_admexp_epci_fr t3
-on t2."code du membre" = t3.code_epci;
+on t2."code epci" = t3.code_epci;
 															   
 
 /*
@@ -425,6 +425,7 @@ WHERE t1.zon_code=t2.zon_code ;
 CREATE TABLE met_env.m_env_pcaet (
 	id serial NOT NULL,
 	zon_code varchar(20) NOT NULL,
+	tepos varchar(255),
 	decision_elaboration varchar(50),
 	statut varchar(50),
 	etape varchar(255),
@@ -443,6 +444,7 @@ COMMENT ON TABLE met_env.m_env_pcaet  IS 'Table contenant les éléments de suiv
 --  
 COMMENT ON COLUMN met_env.m_env_pcaet.id IS 'Identifiant';
 COMMENT ON COLUMN met_env.m_env_pcaet.zon_code IS 'Code du PCAET';
+COMMENT ON COLUMN met_env.m_env_pcaet.tepos IS 'Tepos';
 COMMENT ON COLUMN met_env.m_env_pcaet.decision_elaboration IS 'Date de la décision d''élaboration';
 COMMENT ON COLUMN met_env.m_env_pcaet.statut IS 'Statut du PCAET (obligé/volontaire/autres/Non renseigné)';
 COMMENT ON COLUMN met_env.m_env_pcaet.etape IS 'Etape en cours (0: pas démarré/abandon; 1: délibération; 2: diagnostic réalisé; 3: stratégie réalisé; 4: plan d''action; 5: consultation/approbation)';
@@ -455,12 +457,12 @@ COMMENT ON COLUMN met_env.m_env_pcaet.srce_annee IS 'Année du référentiel gé
 
 --															   
 INSERT INTO met_env.m_env_pcaet(
-	zon_code, decision_elaboration, statut, etape, avancement, 
+	zon_code, tepos, decision_elaboration, statut, etape, avancement, 
 	site_web, commentaires, date_import, date_maj, srce_annee
 )
 SELECT 
-	"code du membre", "décision élaboration", "obligé/volontaire", "etape en cours", avancement, 
-	lien, null, '02/03/2021', null, '2021'
+	"code du membre", tepos, "décision élaboration", "obligé/volontaire", "etape en cours", avancement, 
+	lien, null, '17/03/2021', null, '2021'
 FROM z_maj."20210204_Suivi_PCAET_resume" 
 WHERE "type de membre" = 'EPCI';
 
